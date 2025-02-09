@@ -68,7 +68,7 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script_stop: true
         script: |
-          docker stop cantech || true
-          docker rm cantech || true
+          docker stop auth-service || true
+          docker rm auth-service || true
           docker pull ${{ secrets.DOCKER_USERNAME }}/cantech:${{ github.sha }}
-          docker run -d --name myapp -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/cantech:${{ github.sha }}
+          docker run -d --name auth-service -p 8081:8081 ${{ secrets.DOCKER_USERNAME }}/cantech:${{ github.sha }}
