@@ -19,26 +19,26 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        
-		- name: Cache SonarQube packages
+     
+    - name: Cache SonarQube packages
       uses: actions/cache@v4
       with:
         path: ~/.sonar/cache
         key: ${{ runner.os }}-sonar
         restore-keys: ${{ runner.os }}-sonar
           
-		- name: Cache Gradle packages
-		  uses: actions/cache@v4
-		  with:
-		    path: ~/.gradle/caches
-		    key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-		    restore-keys: ${{ runner.os }}-gradle
+    - name: Cache Gradle packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: ${{ runner.os }}-gradle
 
-		- name: Build and analyze
-		  env:
-		    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-		    SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-		  run: ./gradlew build sonar --info
+    - name: Build and analyze
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      run: ./gradlew build sonar --info
 
     - name: 🐳 Docker 이미지 빌드
       run: |
