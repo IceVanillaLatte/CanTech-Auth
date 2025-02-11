@@ -53,22 +53,3 @@ jobs:
 
     - name: 📤 Docker Hub로 이미지 Push
       run: docker push ${{ secrets.DOCKER_USERNAME }}/cantech:${{ github.sha }}
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: 📥 원격 서버에서 Docker 이미지 Pull 및 실행
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_IP }}
-        username: ${{ secrets.SSH_ID }}
-        key: ${{ secrets.SSH_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        script_stop: true
-        script: |
-          docker stop auth-service || true
-          docker rm auth-service || true
-          docker pull ${{ secrets.DOCKER_USERNAME }}/cantech:${{ github.sha }}
-          docker run -d --name auth-service -p 8081:8081 ${{ secrets.DOCKER_USERNAME }}/cantech:${{ github.sha }}
